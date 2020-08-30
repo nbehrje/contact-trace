@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.sidebar {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #C54040;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.main {
+  margin-left: 275px;
+  padding: 0px 10px;
+}

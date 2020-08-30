@@ -38,6 +38,11 @@ class Main extends Component{
 			JSON.parse(localStorage.getItem('groups')) : [{ id: 1, title: ' ' }]
 		const items = JSON.parse(localStorage.getItem('items')) !== null ?
 			JSON.parse(localStorage.getItem('items')) : []
+		items.forEach(i => {
+			i.start_time = moment(i.start_time)
+			i.end_time = moment(i.end_time)
+		})
+		console.log("r",items)
 		this.setState({
 			groups,
 			items
@@ -53,11 +58,11 @@ class Main extends Component{
 		var newGroups = this.state.groups
 		var newItems = this.state.items
 		for(let i=0; i < this.state.groups.length; i++){
-			if(this.state.groups[i].title == name){
+			if(this.state.groups[i].title === name){
 				groupId = this.state.groups[i].id
 			}
 		}
-		if(groupId == 1){
+		if(groupId === 1){
 			groupId = this.state.groups.length+1
 			newGroups.push({
 				"id": groupId,
@@ -65,7 +70,7 @@ class Main extends Component{
 			})
 		}
 		newItems.push({
-			"id": this.state.items.length,
+			"id": this.state.items.length+1,
 			"group": groupId,
 			"title": eventName,
 			"start_time": start_time,
@@ -84,21 +89,21 @@ class Main extends Component{
 		var groupId = 0
 		var groups = this.state.groups
 		for(let i = 0; i < items.length; i++){
-			if(items[i].id == itemId){
+			if(items[i].id === itemId){
 				groupId = items[i].group
 				items.splice(i,1)
 			}
 		}
 		var found = false
 		for(let i = 0; i < items.length; i++){
-			if(items[i].group == groupId){
+			if(items[i].group === groupId){
 				found = true
 			}
 		}
 		
 		if(!found){
 			for(let i=0; i < groups.length;i++){
-				if(groups[i].id == groupId){
+				if(groups[i].id === groupId){
 					groups.splice(i,1)
 				}
 			}
@@ -112,7 +117,7 @@ class Main extends Component{
 	moveItem=(itemId, dragTime)=>{
 		var items = this.state.items
 		for(let i = 0; i < items.length; i++){
-			if(items[i].id == itemId){
+			if(items[i].id === itemId){
 				items[i].start_time=moment(dragTime)
 				items[i].end_time=moment(dragTime).add(14,'day')
 				items[i].itemProps=getItemProps(items[i].end_time)
@@ -127,16 +132,18 @@ class Main extends Component{
 	render(){
 		return(
 			<div>
-				<Timeline
-					groups={this.state.groups}
-					items={this.state.items}
-					removeItem={this.removeItem.bind(this)}
-					moveItem={this.moveItem.bind(this)}
-					today={moment()}
-					/>
-				<br/>
-				<div className="col-md-6">
-				<AddContact addContact={this.addContact.bind(this)}/>
+				<div className="main">
+					<Timeline
+						groups={this.state.groups}
+						items={this.state.items}
+						removeItem={this.removeItem.bind(this)}
+						moveItem={this.moveItem.bind(this)}
+						today={moment()}
+						/>
+				</div>
+				
+				<div className="sidebar">
+					<AddContact addContact={this.addContact.bind(this)}/>
 				</div>
 			</div>
 		)
@@ -145,8 +152,7 @@ class Main extends Component{
 	persistState = ()=>{
 		localStorage.setItem('groups', JSON.stringify(this.state.groups))
 		localStorage.setItem('items', JSON.stringify(this.state.items))
-		localStorage.setItem('itemsId', this.state.itemsId)
-		localStorage.setItem('groupsId', this.state.groupsId)
+		console.log(JSON.stringify(this.state.items))
 	}
 	
 }

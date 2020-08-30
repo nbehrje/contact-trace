@@ -25,10 +25,10 @@ class AddContact extends Component{
 	render(){
 		return(
 			<div>
-				<form className="col-6" onSubmit={this.handleSubmit}>
+				<form className="" onSubmit={this.handleSubmit}>
 					<div className="form-row justify-content-md-center">
-						<label className="col-sm-2 col-form-label" htmlFor="name">Name</label>
-						<input className="form-control col-sm-3"
+						<label className="col-form-label" htmlFor="name">Name</label>
+						<input className="form-control col-sm-6"
 							type="text"
 							id="name"
 							name="name"
@@ -37,7 +37,7 @@ class AddContact extends Component{
 					</div><br/>
 					<div className="form-row justify-content-md-center">
 						<label className="col-sm-2 col-form-label" htmlFor="event">Event</label>
-						<input className="form-control col-sm-3"
+						<input className="form-control col-sm-6"
 							type="text"
 							id="event"
 							name="event"
@@ -46,7 +46,7 @@ class AddContact extends Component{
 					</div><br/>
 					<div className="form-row justify-content-md-center">
 						<label className="col-sm-2 col-form-label" htmlFor="date">Date</label>
-						<input className="form-control col-sm-3"
+						<input className="form-control col-sm-6"
 							type="date"
 							id="date"
 							name="date"
@@ -55,7 +55,7 @@ class AddContact extends Component{
 					</div><br/>
 					<div className="form-row justify-content-md-center">
 						<label className="col-sm-2 col-form-label" htmlFor="time">Time</label>
-						<input className="form-control col-sm-3"
+						<input className="form-control col-sm-6"
 							type="time"
 							id="time"
 							name="time"
