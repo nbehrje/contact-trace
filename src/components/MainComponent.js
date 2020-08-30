@@ -28,36 +28,20 @@ class Main extends Component{
 	constructor(props){
 		super(props)
 		this.state={
-			groups: [{ id: 1, title: ' ' },{ id: 2, title: 'Alice' }, { id: 3, title: 'Bob' }, { id: 4, title: 'Strangers' }],
-			items: [
-			  {
-				id: 1,
-				group: 2,
-				title: 'Lunch',
-				start_time: moment('2020-08-15 12:00:00'),
-				end_time: moment('2020-08-15 12:00:00').add(14, 'day'),
-				itemProps: getItemProps(moment('2020-08-15 12:00:00').add(14, 'day'))
-			  },
-			  {
-				id: 2,
-				group: 3,
-				title: 'Dinner',
-				start_time: moment('2020-08-22 19:00:00'),
-				end_time: moment('2020-08-22 19:00:00').add(14, 'day'),
-				itemProps: getItemProps(moment('2020-08-22 19:00:00').add(14, 'day'))
-			  },
-			  {
-				id: 3,
-				group: 4,
-				title: 'Grocery Shopping',
-				start_time: moment('2020-08-02 12:00:00'),
-				end_time: moment('2020-08-02 12:00:00').add(14,'day'),
-				itemProps: safeProps
-			  }
-			],
-			itemsId: 4,
-			groupsId: 4
+			groups: [{ id: 1, title: ' ' }],
+			items: []
 		}
+	}
+	
+	componentDidMount() {
+		const groups = JSON.parse(localStorage.getItem('groups')) !== null ?
+			JSON.parse(localStorage.getItem('groups')) : [{ id: 1, title: ' ' }]
+		const items = JSON.parse(localStorage.getItem('items')) !== null ?
+			JSON.parse(localStorage.getItem('items')) : []
+		this.setState({
+			groups,
+			items
+		})
 	}
 	
 	addContact=(newContact)=>{
@@ -65,9 +49,7 @@ class Main extends Component{
 		var end_time = moment(start_time).add(14, 'day')
 		var name = newContact.name
 		var eventName = newContact.event
-		var groupId = 0
-		var groupsId = this.state.groupsId
-		var itemId = this.state.itemsId+1
+		var groupId = 1
 		var newGroups = this.state.groups
 		var newItems = this.state.items
 		for(let i=0; i < this.state.groups.length; i++){
@@ -75,17 +57,15 @@ class Main extends Component{
 				groupId = this.state.groups[i].id
 			}
 		}
-		if(groupId == 0){
-			
-			groupId = ++groupsId
+		if(groupId == 1){
+			groupId = this.state.groups.length+1
 			newGroups.push({
 				"id": groupId,
 				"title": name
 			})
 		}
-		
 		newItems.push({
-			"id": itemId,
+			"id": this.state.items.length,
 			"group": groupId,
 			"title": eventName,
 			"start_time": start_time,
@@ -95,9 +75,7 @@ class Main extends Component{
 		this.setState({
 			groups: newGroups,
 			items: newItems,
-			itemsId: itemId,
-			groupsId: groupsId
-		}, ()=>{console.log(this.state)})
+		}, ()=>{this.persistState()})
 		
 	}
 	
@@ -128,7 +106,7 @@ class Main extends Component{
 		this.setState({
 			"items": items,
 			"groups": groups
-		}, ()=>console.log(this.state))
+		}, ()=>this.persistState())
 	}
 	
 	moveItem=(itemId, dragTime)=>{
@@ -143,7 +121,7 @@ class Main extends Component{
 		}
 		this.setState({
 			"items": items
-		}, ()=>console.log(this.state))
+		}, ()=>this.persistState())
 	}
 	
 	render(){
@@ -162,6 +140,13 @@ class Main extends Component{
 				</div>
 			</div>
 		)
+	}
+	
+	persistState = ()=>{
+		localStorage.setItem('groups', JSON.stringify(this.state.groups))
+		localStorage.setItem('items', JSON.stringify(this.state.items))
+		localStorage.setItem('itemsId', this.state.itemsId)
+		localStorage.setItem('groupsId', this.state.groupsId)
 	}
 	
 }
